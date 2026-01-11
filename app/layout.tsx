@@ -14,25 +14,48 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-neutral-50 text-neutral-900">
+      <body>
         {/* Header */}
-        <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+        <header
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 50,
+            borderBottom: "1px solid rgba(255,255,255,0.10)",
+            background: "rgba(11,16,32,0.55)",
+            backdropFilter: "blur(14px)",
+          }}
+        >
+          <div
+            className="container"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingTop: 16,
+              paddingBottom: 16,
+            }}
+          >
             <Link
               href="/"
-              className="text-lg font-semibold tracking-tight"
+              style={{
+                fontSize: "1.05rem",
+                fontWeight: 750,
+                letterSpacing: "-0.02em",
+                textDecoration: "none",
+              }}
             >
               Everkind Memorials
             </Link>
 
-            <nav className="flex items-center gap-4 text-sm">
-              <Link href="/pricing" className="hover:underline">
+            <nav style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+              <Link className="btn" href="/pricing">
                 Pricing
               </Link>
-              <Link href="/create-memorial" className="hover:underline">
+              <Link className="btn btnPrimary" href="/create-memorial">
                 Create a Memorial
               </Link>
-              <Link href="/about" className="hover:underline">
+              <Link className="btn" href="/about">
                 About
               </Link>
             </nav>
@@ -40,26 +63,41 @@ export default function RootLayout({
         </header>
 
         {/* Main content */}
-        <main className="mx-auto w-full max-w-5xl px-4 py-10">
+        <main className="container" style={{ paddingTop: 26, paddingBottom: 44 }}>
           {children}
         </main>
 
         {/* Footer */}
-        <footer className="mt-16 border-t border-neutral-200 bg-neutral-50">
-          <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-neutral-600">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <span>
+        <footer
+          style={{
+            marginTop: 40,
+            borderTop: "1px solid rgba(255,255,255,0.10)",
+            background: "rgba(11,16,32,0.35)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          <div className="container" style={{ paddingTop: 18, paddingBottom: 18 }}>
+            <div
+              className="card"
+              style={{
+                padding: 16,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              <span style={{ color: "var(--muted)" }}>
                 Every memorial is reviewed by a real person before publication.
               </span>
 
-              <div className="flex items-center gap-4">
-                <Link href="/privacy" className="hover:underline">
+              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+                <Link href="/privacy" className="btn">
                   Privacy
                 </Link>
-                <Link href="/terms" className="hover:underline">
+                <Link href="/terms" className="btn">
                   Terms
                 </Link>
-                <span className="text-neutral-500">
+                <span style={{ color: "var(--muted2)", marginLeft: "auto" }}>
                   © {new Date().getFullYear()} Everkind Memorials
                 </span>
               </div>
