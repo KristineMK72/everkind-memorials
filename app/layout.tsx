@@ -15,28 +15,36 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-neutral-50 text-neutral-900">
+        {/* Header */}
         <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-            <Link href="/" className="text-lg font-semibold tracking-tight">
+            <Link
+              href="/"
+              className="text-lg font-semibold tracking-tight"
+            >
               Everkind Memorials
             </Link>
 
             <nav className="flex items-center gap-4 text-sm">
-              <Link className="hover:underline" href="/pricing">
+              <Link href="/pricing" className="hover:underline">
                 Pricing
               </Link>
-              <Link className="hover:underline" href="/create-memorial">
+              <Link href="/create-memorial" className="hover:underline">
                 Create a Memorial
               </Link>
-              <Link className="hover:underline" href="/about">
+              <Link href="/about" className="hover:underline">
                 About
               </Link>
             </nav>
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-5xl px-4 py-10">{children}</main>
+        {/* Main content */}
+        <main className="mx-auto w-full max-w-5xl px-4 py-10">
+          {children}
+        </main>
 
+        {/* Footer */}
         <footer className="mt-16 border-t border-neutral-200 bg-neutral-50">
           <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-neutral-600">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -45,10 +53,10 @@ export default function RootLayout({
               </span>
 
               <div className="flex items-center gap-4">
-                <Link className="hover:underline" href="/privacy">
+                <Link href="/privacy" className="hover:underline">
                   Privacy
                 </Link>
-                <Link className="hover:underline" href="/terms">
+                <Link href="/terms" className="hover:underline">
                   Terms
                 </Link>
                 <span className="text-neutral-500">
