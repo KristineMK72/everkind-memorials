@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Package = "simple" | "memorial" | "legacy";
+type Package = "free" | "simple" | "memorial" | "legacy";
 
 type Draft = {
   package: Package;
@@ -13,7 +13,7 @@ type Draft = {
   deathDate: string;
   cityState: string;
 
-  photoUrl: string; // ✅ NEW
+  photoUrl: string;
 
   shortBio: string;
   keyMoments: string;
@@ -28,10 +28,15 @@ type Draft = {
   contactEmail: string;
 };
 
-const STORAGE_KEY = "everkind_draft_v1";
+/**
+ * Bump storage key so old drafts don’t collide with the new Package union.
+ * (Otherwise an older draft might load "memorial" but you'd still be fine;
+ * the bigger risk is later if you add/remap fields.)
+ */
+const STORAGE_KEY = "everkind_draft_v2";
 
 const DEFAULT_DRAFT: Draft = {
-  package: "memorial",
+  package: "free",
 
   deceasedName: "",
   preferredName: "",
@@ -39,7 +44,7 @@ const DEFAULT_DRAFT: Draft = {
   deathDate: "",
   cityState: "",
 
-  photoUrl: "", // ✅ NEW
+  photoUrl: "",
 
   shortBio: "",
   keyMoments: "",
@@ -48,7 +53,7 @@ const DEFAULT_DRAFT: Draft = {
   serviceInfo: "",
   charityOrGiving: "",
 
-  allowGuestbook: true,
+  allowGuestbook: false,
 
   contactName: "",
   contactEmail: "",
@@ -64,22 +69,99 @@ function isValidUrlMaybe(url: string) {
   }
 }
 
+/**
+ * Map pricing-page plan keys to create-page package keys.
+ * Supports both:
+ * - pricing terms: free | standard | plus | premium
+ * - internal terms: free | simple | memorial | legacy
+ */
+function normalizePlanToPackage(input: string | null | undefined): Package | null {
+  if (!input) return null;
+  const v = input.toLowerCase().trim();
+
+  if (v === "free") return "free";
+
+  // pricing naming -> internal naming
+  if (v === "standard") return "simple";
+  if (v === "plus") return "memorial";
+  if (v === "premium") return "legacy";
+
+  // internal naming direct
+  if (v === "simple" || v === "memorial" || v === "legacy") return v;
+
+  return null;
+}
+
+function defaultGuestbookForPackage(pkg: Package): boolean {
+  // Keep guestbook as a paid “community” feature
+  if (pkg === "memorial" || pkg === "legacy") return true;
+  return false;
+}
+
 export default function CreateMemorialPage() {
   const [draft, setDraft] = useState<Draft>(DEFAULT_DRAFT);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  // Load saved draft
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw) as Partial<Draft>;
-      setDraft({ ...DEFAULT_DRAFT, ...parsed });
+
+      // Guard against bad/old package values
+      const pkg =
+        parsed.package === "free" ||
+        parsed.package === "simple" ||
+        parsed.package === "memorial" ||
+        parsed.package === "legacy"
+          ? parsed.package
+          : DEFAULT_DRAFT.package;
+
+      const merged: Draft = {
+        ...DEFAULT_DRAFT,
+        ...parsed,
+        package: pkg,
+      };
+
+      setDraft(merged);
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Apply ?plan= from URL (Pricing page) on first render
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href);
+      const planParam = url.searchParams.get("plan");
+      const pkg = normalizePlanToPackage(planParam);
+
+      if (!pkg) return;
+
+      setDraft((d) => {
+        // If user already started filling out, don't clobber other fields.
+        // Only change package + adjust guestbook default *if* user is still on the old default.
+        const nextGuestbook = defaultGuestbookForPackage(pkg);
+
+        const shouldAutoAdjustGuestbook =
+          // If guestbook matches the default for their current package, keep auto-sync behavior
+          d.allowGuestbook === defaultGuestbookForPackage(d.package);
+
+        return {
+          ...d,
+          package: pkg,
+          allowGuestbook: shouldAutoAdjustGuestbook ? nextGuestbook : d.allowGuestbook,
+        };
+      });
     } catch {
       // ignore
     }
   }, []);
 
+  // Save draft (autosave)
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -110,6 +192,22 @@ export default function CreateMemorialPage() {
 
   function update<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((d) => ({ ...d, [key]: value }));
+  }
+
+  function setPackage(pkg: Package) {
+    setDraft((d) => {
+      const nextGuestbookDefault = defaultGuestbookForPackage(pkg);
+
+      const shouldAutoAdjustGuestbook =
+        // If guestbook currently equals the default for the *current* package, keep it auto-synced
+        d.allowGuestbook === defaultGuestbookForPackage(d.package);
+
+      return {
+        ...d,
+        package: pkg,
+        allowGuestbook: shouldAutoAdjustGuestbook ? nextGuestbookDefault : d.allowGuestbook,
+      };
+    });
   }
 
   function clearDraft() {
@@ -160,6 +258,15 @@ export default function CreateMemorialPage() {
     );
   }
 
+  const packageHelp =
+    draft.package === "free"
+      ? "Private draft + share link. No public listing."
+      : draft.package === "simple"
+      ? "Publish publicly after review. Basic photo included."
+      : draft.package === "memorial"
+      ? "Guestbook + standard gallery. Most popular."
+      : "Expanded gallery + priority review + extras.";
+
   return (
     <section className="mx-auto max-w-3xl space-y-6">
       <div className="rounded-2xl border border-neutral-200 bg-white p-8">
@@ -179,13 +286,15 @@ export default function CreateMemorialPage() {
             <div className="text-sm font-medium">Package</div>
             <select
               value={draft.package}
-              onChange={(e) => update("package", e.target.value as Package)}
+              onChange={(e) => setPackage(e.target.value as Package)}
               className="w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm"
             >
+              <option value="free">Free ($0)</option>
               <option value="simple">Simple ($39)</option>
               <option value="memorial">Memorial ($79)</option>
               <option value="legacy">Legacy ($129)</option>
             </select>
+            <p className="text-xs text-neutral-500">{packageHelp}</p>
           </label>
 
           <label className="space-y-1">
@@ -198,6 +307,9 @@ export default function CreateMemorialPage() {
               <option value="yes">Yes (moderated)</option>
               <option value="no">No</option>
             </select>
+            <p className="text-xs text-neutral-500">
+              Tip: Guestbook is best for Memorial/Legacy. Free/Simple works great for a quiet share-by-link page.
+            </p>
           </label>
         </div>
 
@@ -261,7 +373,7 @@ export default function CreateMemorialPage() {
           </label>
         </div>
 
-        {/* ✅ NEW: Photo URL */}
+        {/* Photo URL */}
         <label className="block space-y-1">
           <div className="text-sm font-medium">Photo URL (optional)</div>
           <input
