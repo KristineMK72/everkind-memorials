@@ -30,45 +30,58 @@ type Memorial = {
 
   memorialGivingEnabled?: boolean;
   givingChoice?: GivingChoice;
-  givingNote?: string; // family-provided “in lieu of flowers…” note
+  givingNote?: string;
 };
 
 function getDemoMemorial(slug: string): Memorial {
-  // You can tailor this to your uncle’s details for your example page.
-  // Visit: /m/example
-  if (slug === "example" || slug === "demo" || slug === "uncle") {
+  // Wayne memorial (demo + example)
+  if (slug === "wayne-kahler" || slug === "example" || slug === "demo" || slug === "uncle") {
     return {
       slug,
-      name: "Robert “Bob” Kahler",
-      preferredName: "Bob",
-      birth: "1948-03-12",
-      death: "2024-10-18",
-      cityState: "Minneapolis, MN",
+      name: "Wayne Richard Kahler",
+      preferredName: "Wayne",
+      birth: "1943-09-15",
+      death: "2025-06-15",
+      cityState: "Austin, TX",
+
       obituary:
-        "Bob was steady, kind, and quietly funny — the kind of person who showed up early, stayed late, and never needed recognition. He loved simple mornings, Sunday drives, and being the one you could call when something needed fixing. His life was full of loyalty, laughter, and an abiding care for the people around him.",
+        "Wayne Richard Kahler, a devoted son, brother, uncle, and friend, passed away peacefully on June 15, 2025, in Austin, Texas, at the age of 81. Born on September 15, 1943, in Martin County, Minnesota, Wayne was the son of Richard and Laura (Hartmann) Kahler.\n\n" +
+        "Wayne grew up in Truman, Minnesota, alongside his sister Sandra and brother Warren, where he developed lifelong values of service, independence, and quiet strength. After graduating from high school, Wayne enlisted in the United States Air Force during the Vietnam War, and was stationed in Japan, proudly serving his country during a time of global transformation. His experiences overseas left an enduring impression—broadening his perspective and shaping his steadfast nature.\n\n" +
+        "Throughout his life, Wayne called many places home—Minnesota, Florida, and eventually Texas—carving out a unique path and building friendships wherever he went.\n\n" +
+        "In his free time, Wayne found joy in spending time with friends and family, cheering on many sports teams including but not limited to the Minnesota Vikings, Twins, Gophers, and Wild. Whether through a quiet act of kindness or a sharp one-liner, Wayne left a lasting impression. He was a loyal friend, a steady presence, and someone who always made time to listen.\n\n" +
+        "Wayne was preceded in death by his parents, Richard and Laura, and his sister, Sandra (Dean) Williams. He is lovingly remembered by his brother Warren Kahler, brother-in-law Dean Williams, nieces Denise (Steven) Fitch, Kristine Kahler, and Emily (Christopher) McCann, nephews Dean (Brenda) Williams, Daniel (Stacey) Williams, Dwight (Melissa) Williams, Thomas (Michelle) Kahler, Michael Kahler, and Stephen Kahler, as well as many great-nieces and great-nephews. He also leaves behind many dear friends in Austin, including his cherished friend, William Garcia.",
+
       lifeMoments: [
-        "A lifelong learner with a practical, generous spirit",
-        "Known for showing up — for family, neighbors, and friends",
-        "Loved the outdoors, strong coffee, and a good story",
+        "Proud veteran of the United States Air Force, stationed in Japan during the Vietnam War",
+        "Lived in Minnesota, Florida, and Texas — building friendships wherever he went",
+        "A loyal friend with quiet strength and a sharp one-liner",
+        "Loved cheering on Minnesota teams: Vikings, Twins, Gophers, and Wild",
       ],
+
       family: [
-        "Survived by family who loved him deeply",
-        "Remembered by friends across generations",
+        "Preceded in death by his parents, Richard and Laura (Hartmann) Kahler, and his sister, Sandra (Dean) Williams",
+        "Lovingly remembered by his brother Warren Kahler and brother-in-law Dean Williams",
+        "Nieces: Denise (Steven) Fitch, Kristine Kahler, Emily (Christopher) McCann",
+        "Nephews: Dean (Brenda) Williams, Daniel (Stacey) Williams, Dwight (Melissa) Williams, Thomas (Michelle) Kahler, Michael Kahler, Stephen Kahler",
+        "Also remembered by many great-nieces and great-nephews",
+        "And many dear friends in Austin, including his cherished friend, William Garcia",
       ],
+
       service: {
-        title: "Service details",
-        details:
-          "A private family service will be held. Friends are welcome to share memories and messages through this page.",
+        title: "Celebration of Life",
+        details: "A celebration of Wayne’s life was held in Austin, Texas, on September 13, 2025.",
       },
+
       guestbookEnabled: true,
+
       memorialGivingEnabled: true,
       givingChoice: "trees",
       givingNote:
-        "In lieu of flowers, the family invites those who wish to honor Bob’s memory through a small act of giving.",
+        "In lieu of flowers, the family invites those who wish to honor Wayne’s memory through a small act of giving.",
     };
   }
 
-  // Default fallback (until you wire real data). Keeps the page looking complete.
+  // Default fallback (until you wire real data)
   return {
     slug,
     name: "Everkind Example Memorial",
@@ -149,17 +162,21 @@ export default async function MemorialPage({
         <section className="grid grid2" style={{ alignItems: "start" }}>
           <div className="card" style={{ padding: 18, borderRadius: 22 }}>
             <div style={{ fontWeight: 900, marginBottom: 10 }}>Obituary</div>
-            <div style={{ color: "var(--muted)", lineHeight: 1.7 }}>
+
+            {/* IMPORTANT: makes \n\n display as paragraphs */}
+            <div style={{ color: "var(--muted)", lineHeight: 1.7, whiteSpace: "pre-line" }}>
               {memorial.obituary}
             </div>
 
             {memorial.lifeMoments?.length ? (
               <>
                 <div style={{ height: 14 }} />
-                <div style={{ fontWeight: 900, marginBottom: 10 }}>Life & moments</div>
+                <div style={{ fontWeight: 900, marginBottom: 10 }}>Life &amp; moments</div>
                 <ul style={{ margin: 0, paddingLeft: 18, color: "var(--muted)" }}>
                   {memorial.lifeMoments.map((m) => (
-                    <li key={m} style={{ marginBottom: 8 }}>{m}</li>
+                    <li key={m} style={{ marginBottom: 8 }}>
+                      {m}
+                    </li>
                   ))}
                 </ul>
               </>
@@ -171,7 +188,9 @@ export default async function MemorialPage({
                 <div style={{ fontWeight: 900, marginBottom: 10 }}>Family</div>
                 <ul style={{ margin: 0, paddingLeft: 18, color: "var(--muted)" }}>
                   {memorial.family.map((f) => (
-                    <li key={f} style={{ marginBottom: 8 }}>{f}</li>
+                    <li key={f} style={{ marginBottom: 8 }}>
+                      {f}
+                    </li>
                   ))}
                 </ul>
               </>
@@ -184,26 +203,28 @@ export default async function MemorialPage({
               <div style={{ fontWeight: 900, marginBottom: 8 }}>
                 {memorial.service?.title || "Service details"}
               </div>
-              <div style={{ color: "var(--muted)", lineHeight: 1.7 }}>
+              <div style={{ color: "var(--muted)", lineHeight: 1.7, whiteSpace: "pre-line" }}>
                 {memorial.service?.details || "Service details can be added here."}
               </div>
             </div>
 
-            {/* Memorial Giving (ACKNOWLEDGEMENT) */}
+            {/* Memorial Giving */}
             {memorial.memorialGivingEnabled ? (
               <div className="card" style={{ padding: 18, borderRadius: 22 }}>
                 <div style={{ fontWeight: 900, marginBottom: 8 }}>Memorial giving</div>
 
                 <div style={{ color: "var(--muted)", lineHeight: 1.7 }}>
-                  {/* This is the acknowledgement you asked for: */}
                   <div style={{ marginBottom: 10 }}>
                     <strong style={{ color: "var(--text)" }}>In lieu of flowers</strong>,{" "}
                     {memorial.givingNote ||
-                      `the family invites those who wish to honor ${memorial.preferredName || memorial.name}'s memory through a gentle act of giving.`}
+                      `the family invites those who wish to honor ${
+                        memorial.preferredName || memorial.name
+                      }'s memory through a gentle act of giving.`}
                   </div>
 
                   <div style={{ color: "var(--muted2)", fontSize: "0.95rem" }}>
-                    Donations are made directly to the organization in a new tab. Everkind does not process or receive funds.
+                    Donations are made directly to the organization in a new tab. Everkind does not process or receive
+                    funds.
                   </div>
                 </div>
 
@@ -250,7 +271,7 @@ export default async function MemorialPage({
                   Messages are moderated to keep this space respectful.
                 </div>
 
-                <div style={{ marginTop: 12 }} className="grid" >
+                <div style={{ marginTop: 12 }} className="grid">
                   <div className="card" style={{ padding: 14, borderRadius: 18 }}>
                     <div style={{ fontWeight: 800 }}>“Thinking of your family with love.”</div>
                     <div style={{ color: "var(--muted2)", marginTop: 6 }}>— A friend</div>
