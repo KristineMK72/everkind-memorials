@@ -1,137 +1,279 @@
-:root {
-  --bg: #0b1020;
-  --panel: rgba(255, 255, 255, 0.22);      /* ↑ a bit more for reliable contrast */
-  --panel-2: rgba(255, 255, 255, 0.28);
-  --border: rgba(255, 255, 255, 0.18);
-  
-  --text: #ffffff;
-  --muted: rgba(255, 255, 255, 0.88);      /* ↑ clearer */
-  --muted2: rgba(255, 255, 255, 0.72);     /* ↑ still subtle but readable */
+/* =========================================================
+   Everkind Global Styles (mobile-safe, form-safe, glass-safe)
+========================================================= */
 
-  --accent: #d7b7ff;
-  --accent2: #93d7ff;
-  --shadow: 0 12px 50px rgba(0,0,0,0.45);
+:root{
+  --bg:#0b1020;
 
-  --radius: 18px;
-  --radius-lg: 26px;
-  --max: 1100px;
+  /* Glass panels */
+  --panel:rgba(255,255,255,0.22);
+  --panel-2:rgba(255,255,255,0.28);
+  --border:rgba(255,255,255,0.18);
+
+  /* Text */
+  --text:#fff;
+  --muted:rgba(255,255,255,0.88);
+  --muted2:rgba(255,255,255,0.72);
+
+  /* Accents */
+  --accent:#d7b7ff;
+  --accent2:#93d7ff;
+
+  /* Effects */
+  --shadow:0 12px 50px rgba(0,0,0,0.45);
+
+  /* Layout */
+  --radius:18px;
+  --radius-lg:26px;
+  --max:1100px;
+
+  /* Controls */
+  --control-bg:rgba(255,255,255,0.10);
+  --control-bg-hover:rgba(255,255,255,0.14);
+  --control-border:rgba(255,255,255,0.18);
+  --control-border-hover:rgba(255,255,255,0.26);
+  --control-focus:rgba(215,183,255,0.55);
+
+  --gap:18px;
 }
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+*{ box-sizing:border-box; }
 
-body {
-  margin: 0;
-  color: var(--text);
-  background: radial-gradient(1200px 800px at 20% 10%, rgba(215,183,255,0.16), transparent 60%),
-              radial-gradient(900px 700px at 80% 15%, rgba(147,215,255,0.12), transparent 60%),
-              radial-gradient(1200px 900px at 40% 90%, rgba(255,255,255,0.05), transparent 60%),
-              var(--bg);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  line-height: 1.5;
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 800px at 20% 10%, rgba(215,183,255,0.16), transparent 60%),
+    radial-gradient(900px 700px at 80% 15%, rgba(147,215,255,0.12), transparent 60%),
+    radial-gradient(1200px 900px at 40% 90%, rgba(255,255,255,0.05), transparent 60%),
+    var(--bg);
+  font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
-/* Stronger fallback for poor blur support (more common on mobile) */
+img,svg,video{ max-width:100%; height:auto; display:block; }
+
+a{ color:inherit; text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+.container{
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+  padding:24px;
+}
+
+/* =========================================================
+   Glass surfaces
+========================================================= */
+
+.glass{
+  background:linear-gradient(180deg, var(--panel), var(--panel-2));
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 10px 35px rgba(0,0,0,0.35);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+/* Fallback for mobile/older devices w/ weak blur support */
 @supports not (backdrop-filter: blur(1px)) {
-  .glass, .card {
-    background: rgba(20, 25, 45, 0.94) !important; /* dark solid */
-    backdrop-filter: none !important;
+  .glass, .card{
+    background:rgba(20,25,45,0.94) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
   }
 }
 
-a { color: inherit; text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-.container {
-  width: 100%;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.glass {
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* Mobile: add subtle dark overlay + lower blur to fight gradient bleed */
-@media (max-width: 768px) {
-  .glass,
-  .card {
-    background: linear-gradient(180deg, rgba(20,25,45,0.12), rgba(20,25,45,0.08)), 
-                linear-gradient(180deg, var(--panel), var(--panel-2)); /* dark tint first */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+/* Mobile: add dark tint to fight gradient bleed + reduce blur */
+@media (max-width: 768px){
+  .glass, .card{
+    background:
+      linear-gradient(180deg, rgba(20,25,45,0.14), rgba(20,25,45,0.10)),
+      linear-gradient(180deg, var(--panel), var(--panel-2));
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
   }
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.10);
-  color: var(--text);
-  font-weight: 650;
-  letter-spacing: 0.2px;
-  transition: transform 120ms ease, background 120ms ease, border 120ms ease;
+/* =========================================================
+   Typography helpers
+========================================================= */
+
+.kicker{
+  color:var(--muted);
+  font-weight:650;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-size:0.8rem;
 }
 
-.btn:hover {
-  text-decoration: none;
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.26);
-  transform: translateY(-1px);
+.h1{
+  font-size:clamp(2.2rem, 4vw, 3.2rem);
+  line-height:1.08;
+  margin:10px 0 12px;
 }
 
-.btnPrimary {
-  border: 1px solid rgba(215,183,255,0.50);
-  background: linear-gradient(180deg, rgba(215,183,255,0.26), rgba(147,215,255,0.20));
+.h2{
+  font-size:1.35rem;
+  line-height:1.2;
+  margin:0 0 10px;
 }
 
-/* Rest unchanged – good as is */
-.kicker {
-  color: var(--muted);
-  font-weight: 650;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 0.8rem;
+.p{
+  color:var(--muted);
+  font-size:1.05rem;
+  margin:0;
 }
 
-.h1 {
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
-  line-height: 1.08;
-  margin: 10px 0 12px;
+/* =========================================================
+   Grid / layout utilities (THE FIX for “smashing together”)
+========================================================= */
+
+.grid{ display:grid; gap:var(--gap); }
+
+@media (min-width: 840px){
+  .grid2{ grid-template-columns:1.2fr 0.8fr; }
+  .grid3{ grid-template-columns:repeat(3, 1fr); }
 }
 
-.p {
-  color: var(--muted);
-  font-size: 1.05rem;
-  margin: 0;
+/* Generic rows for forms */
+.row{ display:grid; gap:12px; }
+.row2{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+.row3{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+
+/* City/State */
+.rowCityState{
+  grid-template-columns: minmax(0, 1fr) 150px;
 }
 
-.grid {
-  display: grid;
-  gap: 18px;
+/* City/State/Zip */
+.rowCityStateZip{
+  grid-template-columns: minmax(0, 1fr) 150px 140px;
 }
 
-@media (min-width: 840px) {
-  .grid2 { grid-template-columns: 1.2fr 0.8fr; }
-  .grid3 { grid-template-columns: repeat(3, 1fr); }
+/* Prevent overflow in grid/flex children */
+.row > *{ min-width:0; }
+
+/* Responsive collapse rules */
+@media (max-width: 720px){
+  .rowCityStateZip{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  .rowCityStateZip .city{
+    grid-column:1 / -1; /* city goes full width */
+  }
 }
+
+@media (max-width: 520px){
+  .row2, .row3, .rowCityState, .rowCityStateZip{
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rowCityStateZip .city{
+    grid-column:auto;
+  }
+}
+
+/* =========================================================
+   Form controls (mobile Safari safe)
+========================================================= */
+
+label{
+  display:block;
+  font-weight:650;
+  color:var(--muted);
+  margin:0 0 8px;
+}
+
+input, select, textarea{
+  width:100%;
+  max-width:100%;
+  color:var(--text);
+  background:var(--control-bg);
+  border:1px solid var(--control-border);
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:1rem;
+  outline:none;
+}
+
+textarea{ min-height:120px; resize:vertical; }
+
+input::placeholder, textarea::placeholder{
+  color:rgba(255,255,255,0.55);
+}
+
+input:hover, select:hover, textarea:hover{
+  border-color:var(--control-border-hover);
+  background:var(--control-bg-hover);
+}
+
+input:focus, select:focus, textarea:focus{
+  border-color:var(--control-focus);
+  box-shadow:0 0 0 4px rgba(215,183,255,0.18);
+}
+
+/* Reduce iOS zoom on focus */
+@media (max-width: 520px){
+  input, select, textarea{ font-size:16px; }
+}
+
+/* =========================================================
+   Buttons
+========================================================= */
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid var(--control-border);
+  background:var(--control-bg);
+  color:var(--text);
+  font-weight:650;
+  letter-spacing:0.2px;
+  cursor:pointer;
+  transition:transform 120ms ease, background 120ms ease, border 120ms ease;
+}
+
+.btn:hover{
+  text-decoration:none;
+  background:var(--control-bg-hover);
+  border-color:var(--control-border-hover);
+  transform:translateY(-1px);
+}
+
+.btn:active{ transform:translateY(0); }
+
+.btnPrimary{
+  border:1px solid rgba(215,183,255,0.50);
+  background:linear-gradient(180deg, rgba(215,183,255,0.26), rgba(147,215,255,0.20));
+}
+
+/* =========================================================
+   Small utilities
+========================================================= */
+
+.divider{
+  height:1px;
+  width:100%;
+  background:rgba(255,255,255,0.14);
+}
+
+.muted{ color:var(--muted); }
+.muted2{ color:var(--muted2); }
