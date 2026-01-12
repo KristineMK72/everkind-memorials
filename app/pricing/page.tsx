@@ -1,7 +1,9 @@
 import Link from "next/link";
 
+type PlanKey = "free" | "standard" | "plus" | "premium";
+
 type Plan = {
-  key: "free" | "plus" | "premium";
+  key: PlanKey;
   name: string;
   price: string;
   cadence: string;
@@ -22,35 +24,56 @@ const PLANS: Plan[] = [
     features: [
       "Private draft (link-only)",
       "Obituary + service details",
-      "Edit anytime on this device",
-      "Optional guestbook later",
+      "Unlimited edits",
+      "Share private link anytime",
+      "Upgrade later to publish publicly",
     ],
     cta: "Start free",
-    href: "/create-memorial",
+    href: "/create-memorial?plan=free",
   },
+
+  // ✅ NEW $39 OPTION
+  {
+    key: "standard",
+    name: "Standard",
+    price: "$39",
+    cadence: "one-time",
+    note: "A simple memorial page you can publish publicly (no guestbook).",
+    features: [
+      "Everything in Free",
+      "Public publishing option (after review)",
+      "Basic photo (cover) + small gallery",
+      "Shareable memorial link",
+      "Edits allowed (public changes may re-review)",
+    ],
+    cta: "Choose Standard",
+    href: "/create-memorial?plan=standard",
+  },
+
   {
     key: "plus",
     name: "Plus",
     price: "$79",
     cadence: "one-time",
-    note: "A full memorial page with guestbook and gallery.",
+    note: "Most popular: guestbook + gallery for friends and family.",
     features: [
-      "Everything in Free",
+      "Everything in Standard",
       "Guestbook (moderated)",
       "Photo gallery (standard)",
-      "Public publishing option (after review)",
       "Support for charity / giving links",
+      "Public publishing option (after review)",
     ],
     cta: "Choose Plus",
-    href: "/create-memorial",
+    href: "/create-memorial?plan=plus",
     featured: true,
   },
+
   {
     key: "premium",
     name: "Premium",
     price: "$129",
     cadence: "one-time",
-    note: "For families who want extra space and polish.",
+    note: "For families who want extra space and priority handling.",
     features: [
       "Everything in Plus",
       "Expanded gallery",
@@ -59,7 +82,7 @@ const PLANS: Plan[] = [
       "Enhanced layout options",
     ],
     cta: "Choose Premium",
-    href: "/create-memorial",
+    href: "/create-memorial?plan=premium",
   },
 ];
 
@@ -74,12 +97,20 @@ export default function PricingPage() {
             Simple options, respectful defaults.
           </h1>
           <p className="p" style={{ maxWidth: 860 }}>
-            Every memorial starts private by default. Share with a link, invite family, and publish publicly only if you
-            choose — after a real person reviews it.
+            Every memorial starts private by default. Share with a link, invite family,
+            and publish publicly only if you choose — after a real person reviews it.
           </p>
 
           <div style={{ marginTop: 16 }} className="card">
-            <div style={{ padding: 16, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+            <div
+              style={{
+                padding: 16,
+                display: "flex",
+                gap: 12,
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
               <span style={{ color: "var(--muted)" }}>Human review before publication</span>
               <span style={{ color: "var(--muted2)" }}>Most approvals: 24–48 hours</span>
               <span style={{ color: "var(--muted2)", marginLeft: "auto" }}>Launch pricing</span>
@@ -94,7 +125,7 @@ export default function PricingPage() {
           ))}
         </section>
 
-        {/* FAQ-ish / reassurance */}
+        {/* Questions */}
         <section style={{ marginTop: 18 }} className="glass">
           <div style={{ padding: 22 }}>
             <div className="kicker">Questions</div>
@@ -147,13 +178,13 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              <Link className="btn btnPrimary" href="/create-memorial">
+              <Link className="btn btnPrimary" href="/create-memorial?plan=free">
                 Start a memorial
               </Link>
             </div>
 
             <div style={{ marginTop: 12, color: "var(--muted2)", fontSize: "0.95rem" }}>
-              Billing + payment wiring can be added next; this page is ready for launch and easy to update.
+              Payment wiring can be added next; this page is launch-ready and easy to update.
             </div>
           </div>
         </section>
@@ -185,7 +216,6 @@ function PlanCard({ plan }: { plan: Plan }) {
         overflow: "hidden",
       }}
     >
-      {/* Featured badge */}
       {plan.featured ? (
         <div
           style={{
