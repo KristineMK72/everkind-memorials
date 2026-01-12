@@ -11,20 +11,25 @@ function toTitleCaseFromSlug(slug: string) {
 export default function StateLocationsPage({
   params,
 }: {
-  params: { state?: string | string[] };
+  params: Record<string, string | string[] | undefined>;
 }) {
-  // Guard: Next can sometimes represent params as string[] in edge cases.
-  const raw = Array.isArray(params?.state) ? params.state[0] : params?.state;
+  // Support multiple possible param names:
+  // - /locations/[state] -> params.state
+  // - /locations/[slug]  -> params.slug
+  // - fallback -> first key in params
+  let raw =
+    (params.state as any) ??
+    (params.slug as any) ??
+    (Object.keys(params || {}).length ? (params as any)[Object.keys(params)[0]] : undefined);
 
-  // Guard: never crash
-  const safeSlug = typeof raw === "string" && raw.length ? raw : "unknown";
+  if (Array.isArray(raw)) raw = raw[0];
+  if (typeof raw !== "string" || !raw.length) raw = "unknown";
 
-  // Decode (in case something was encoded in a link)
-  let decoded = safeSlug;
+  let decoded = raw;
   try {
-    decoded = decodeURIComponent(safeSlug);
+    decoded = decodeURIComponent(raw);
   } catch {
-    // ignore bad URI sequences
+    // ignore
   }
 
   const stateName = toTitleCaseFromSlug(decoded);
