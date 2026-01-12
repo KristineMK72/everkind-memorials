@@ -163,6 +163,9 @@ export default function RootLayout({
                     alignItems: "center",
                   }}
                 >
+                  <Link href="/donations" className="btn" style={{ padding: "10px 14px", fontSize: "0.95rem" }}>
+                    Donations
+                  </Link>
                   <Link href="/privacy" className="btn" style={{ padding: "10px 14px", fontSize: "0.95rem" }}>
                     Privacy
                   </Link>
