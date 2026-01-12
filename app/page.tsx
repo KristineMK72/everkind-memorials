@@ -1,5 +1,18 @@
 import Link from "next/link";
 
+type HomeState = { name: string; abbr: string; slug: string };
+
+const HOME_STATES: HomeState[] = [
+  { name: "Minnesota", abbr: "MN", slug: "minnesota" },
+  { name: "Wisconsin", abbr: "WI", slug: "wisconsin" },
+  { name: "Iowa", abbr: "IA", slug: "iowa" },
+  { name: "Illinois", abbr: "IL", slug: "illinois" },
+  { name: "North Dakota", abbr: "ND", slug: "north-dakota" },
+  { name: "South Dakota", abbr: "SD", slug: "south-dakota" },
+  { name: "Michigan", abbr: "MI", slug: "michigan" },
+  { name: "Indiana", abbr: "IN", slug: "indiana" },
+];
+
 export default function Home() {
   return (
     <main>
@@ -10,10 +23,7 @@ export default function Home() {
         <section className="glass" style={{ padding: 26 }}>
           <div className="kicker">Everkind Memorials</div>
 
-          <div
-            className="grid grid2"
-            style={{ alignItems: "start", gap: 18, marginTop: 10 }}
-          >
+          <div className="grid grid2" style={{ alignItems: "start", gap: 18, marginTop: 10 }}>
             {/* Left: Headline + Search */}
             <div>
               <h1 className="h1" style={{ marginTop: 6 }}>
@@ -21,27 +31,20 @@ export default function Home() {
               </h1>
 
               <p className="p" style={{ maxWidth: 680 }}>
-                Search memorials by name or location, or create a respectful memorial
-                page in minutes. Every memorial is reviewed by a real person.
+                Search memorials by name or location, or create a respectful memorial page in minutes. Every memorial is
+                reviewed by a real person.
               </p>
 
               {/* Search Card */}
               <div className="card" style={{ padding: 18, borderRadius: 22, marginTop: 16 }}>
-                <div style={{ fontWeight: 750, marginBottom: 10 }}>
-                  Search memorials
-                </div>
+                <div style={{ fontWeight: 750, marginBottom: 10 }}>Search memorials</div>
 
-                <form
-                  action="/search"
-                  method="GET"
-                  style={{ display: "grid", gap: 10 }}
-                >
+                <form action="/search" method="GET" style={{ display: "grid", gap: 10 }}>
                   <div style={{ display: "grid", gap: 10 }}>
                     <input
                       name="q"
                       placeholder="Name (e.g., Jane Doe)"
                       aria-label="Search by name"
-                      className="input"
                       style={{
                         width: "100%",
                         padding: "12px 12px",
@@ -57,7 +60,6 @@ export default function Home() {
                         name="location"
                         placeholder="City or State (optional)"
                         aria-label="Search by location"
-                        className="input"
                         style={{
                           width: "100%",
                           padding: "12px 12px",
@@ -71,7 +73,6 @@ export default function Home() {
                       <select
                         name="range"
                         aria-label="Date range"
-                        className="input"
                         defaultValue="30"
                         style={{
                           width: "100%",
@@ -94,34 +95,35 @@ export default function Home() {
                     <button type="submit" className="btn btnPrimary">
                       Search
                     </button>
+
+                    {/* If /recent still 404s, switch to /locations for now */}
                     <Link className="btn" href="/recent">
                       Browse recent
                     </Link>
+
                     <Link className="btn" href="/examples">
                       View examples
                     </Link>
                   </div>
 
                   <div style={{ marginTop: 10, color: "var(--muted2)", fontSize: "0.95rem" }}>
-                    Tip: Try a last name + state (e.g., “Johnson”, “Minnesota”).
+                    Tip: Try a last name + state (e.g., “Johnson”, “MN”).
                   </div>
                 </form>
               </div>
             </div>
 
-            {/* Right: Publish CTA (Legacy-like “Publish an obituary”) */}
+            {/* Right: Publish CTA */}
             <div className="card" style={{ padding: 18, borderRadius: 22 }}>
-              <div style={{ fontWeight: 800, marginBottom: 8 }}>
-                Publish a memorial
-              </div>
+              <div style={{ fontWeight: 800, marginBottom: 8 }}>Publish a memorial</div>
 
               <div style={{ color: "var(--muted)", lineHeight: 1.65 }}>
-                Create an obituary and memorial page with service details, photos,
-                and an optional guestbook. Drafts are private by default.
+                Create an obituary and memorial page with service details, photos, and an optional guestbook. Drafts are
+                private by default.
               </div>
 
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14 }}>
-                <Link className="btn btnPrimary" href="/create-memorial">
+                <Link className="btn btnPrimary" href="/create-memorial?plan=free">
                   Create a memorial
                 </Link>
                 <Link className="btn" href="/pricing">
@@ -130,17 +132,8 @@ export default function Home() {
               </div>
 
               <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                <div style={{ color: "var(--muted)", fontWeight: 700, marginBottom: 8 }}>
-                  Includes
-                </div>
-                <ul
-                  style={{
-                    margin: 0,
-                    paddingLeft: 18,
-                    color: "var(--muted)",
-                    lineHeight: 1.65,
-                  }}
-                >
+                <div style={{ color: "var(--muted)", fontWeight: 700, marginBottom: 8 }}>Includes</div>
+                <ul style={{ margin: 0, paddingLeft: 18, color: "var(--muted)", lineHeight: 1.65 }}>
                   <li>Written obituary</li>
                   <li>Service details</li>
                   <li>Guestbook (optional)</li>
@@ -155,7 +148,6 @@ export default function Home() {
 
         {/* =========================
             RECENT MEMORIALS (placeholder cards)
-            Hook this up to your real data later.
         ========================== */}
         <section>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
@@ -202,15 +194,13 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div style={{ marginTop: 10, color: "var(--muted)", lineHeight: 1.6 }}>
-                  {m.blurb}
-                </div>
+                <div style={{ marginTop: 10, color: "var(--muted)", lineHeight: 1.6 }}>{m.blurb}</div>
 
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 12 }}>
                   <Link className="btn btnPrimary" href="/examples">
                     View memorial
                   </Link>
-                  <Link className="btn" href="/create-memorial">
+                  <Link className="btn" href="/create-memorial?plan=free">
                     Create similar
                   </Link>
                 </div>
@@ -222,7 +212,7 @@ export default function Home() {
         <div style={{ height: 18 }} />
 
         {/* =========================
-            BROWSE BY LOCATION (Legacy-like)
+            BROWSE BY LOCATION
         ========================== */}
         <section className="card" style={{ padding: 18, borderRadius: 22 }}>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
@@ -236,35 +226,20 @@ export default function Home() {
 
           <div style={{ height: 10 }} />
 
-          <div
-            className="grid"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-              gap: 10,
-            }}
-          >
-            {["Minnesota", "Wisconsin", "Iowa", "Illinois", "North Dakota", "South Dakota", "Michigan", "Indiana"].map(
-              (state) => (
-                <Link
-                  key={state}
-                  href={`/locations/${encodeURIComponent(state.toLowerCase())}`}
-                  className="card"
-                  style={{
-                    padding: 14,
-                    borderRadius: 18,
-                    textDecoration: "none",
-                    color: "inherit",
-                    background: "rgba(255,255,255,0.55)",
-                  }}
-                >
-                  <div style={{ fontWeight: 800 }}>{state}</div>
-                  <div style={{ color: "var(--muted)", marginTop: 2 }}>
-                    View memorials
-                  </div>
-                </Link>
-              )
-            )}
+          {/* Uses the same mobile-safe grid as /locations */}
+          <div className="ekStateGrid">
+            {HOME_STATES.map((s) => (
+              <Link
+                key={s.slug}
+                href={`/locations/${s.slug}`}
+                className="ekStateTile"
+                aria-label={s.name}
+                title={s.name}
+              >
+                <div className="ekStateAbbr">{s.abbr}</div>
+                <div className="ekStateName">{s.name}</div>
+              </Link>
+            ))}
           </div>
 
           <div style={{ marginTop: 12, color: "var(--muted2)", fontSize: "0.95rem" }}>
@@ -275,11 +250,11 @@ export default function Home() {
         <div style={{ height: 18 }} />
 
         {/* =========================
-            TRUST / WHY EVERKIND (keep your brand)
+            TRUST / WHY EVERKIND
         ========================== */}
         <section className="grid grid3">
           <div className="card" style={{ padding: 18 }}>
-            <div style={{ fontWeight: 800, marginBottom: 8 }}>Gentle & simple</div>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>Gentle &amp; simple</div>
             <div style={{ color: "var(--muted)" }}>
               A calm, guided process — no confusing packages or surprise fees.
             </div>
