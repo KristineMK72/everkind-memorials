@@ -41,6 +41,9 @@
 
 html,body{ height:100%; }
 
+/* Prevent horizontal scroll on small screens */
+body{ overflow-x:hidden; }
+
 body{
   margin:0;
   color:var(--text);
@@ -140,7 +143,7 @@ a:hover{ text-decoration:underline; }
 }
 
 /* =========================================================
-   Grid / layout utilities (THE FIX for “smashing together”)
+   Grid / layout utilities
 ========================================================= */
 
 .grid{ display:grid; gap:var(--gap); }
@@ -263,6 +266,50 @@ input:focus, select:focus, textarea:focus{
 .btnPrimary{
   border:1px solid rgba(215,183,255,0.50);
   background:linear-gradient(180deg, rgba(215,183,255,0.26), rgba(147,215,255,0.20));
+}
+
+/* =========================================================
+   Locations grid (NEW) — used by /locations
+========================================================= */
+
+.ekStateGrid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.ekStateTile{
+  display:grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  text-decoration: none;
+}
+
+.ekStateTile:hover{
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.22);
+  text-decoration: none;
+}
+
+.ekStateAbbr{
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  font-size: 1.05rem;
+}
+
+.ekStateName{
+  color: rgba(255,255,255,0.78);
+  font-size: 0.95rem;
+  line-height: 1.1;
+}
+
+@media (max-width: 420px){
+  .ekStateGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ekStateName{ display:none; } /* tiny phones: abbreviations only */
 }
 
 /* =========================================================
