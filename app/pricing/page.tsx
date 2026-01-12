@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type PlanKey = "free" | "standard" | "plus" | "premium";
+type PlanKey = "free" | "simple" | "memorial" | "legacy";
 
 type Plan = {
   key: PlanKey;
@@ -31,11 +31,9 @@ const PLANS: Plan[] = [
     cta: "Start free",
     href: "/create-memorial?plan=free",
   },
-
-  // ✅ NEW $39 OPTION
   {
-    key: "standard",
-    name: "Standard",
+    key: "simple",
+    name: "Simple",
     price: "$39",
     cadence: "one-time",
     note: "A simple memorial page you can publish publicly (no guestbook).",
@@ -46,43 +44,41 @@ const PLANS: Plan[] = [
       "Shareable memorial link",
       "Edits allowed (public changes may re-review)",
     ],
-    cta: "Choose Standard",
-    href: "/create-memorial?plan=standard",
+    cta: "Choose Simple",
+    href: "/create-memorial?plan=simple",
   },
-
   {
-    key: "plus",
-    name: "Plus",
+    key: "memorial",
+    name: "Memorial",
     price: "$79",
     cadence: "one-time",
     note: "Most popular: guestbook + gallery for friends and family.",
     features: [
-      "Everything in Standard",
+      "Everything in Simple",
       "Guestbook (moderated)",
       "Photo gallery (standard)",
       "Support for charity / giving links",
       "Public publishing option (after review)",
     ],
-    cta: "Choose Plus",
-    href: "/create-memorial?plan=plus",
+    cta: "Choose Memorial",
+    href: "/create-memorial?plan=memorial",
     featured: true,
   },
-
   {
-    key: "premium",
-    name: "Premium",
+    key: "legacy",
+    name: "Legacy",
     price: "$129",
     cadence: "one-time",
     note: "For families who want extra space and priority handling.",
     features: [
-      "Everything in Plus",
+      "Everything in Memorial",
       "Expanded gallery",
       "Priority review",
       "Custom URL (when available)",
       "Enhanced layout options",
     ],
-    cta: "Choose Premium",
-    href: "/create-memorial?plan=premium",
+    cta: "Choose Legacy",
+    href: "/create-memorial?plan=legacy",
   },
 ];
 
@@ -97,20 +93,12 @@ export default function PricingPage() {
             Simple options, respectful defaults.
           </h1>
           <p className="p" style={{ maxWidth: 860 }}>
-            Every memorial starts private by default. Share with a link, invite family,
-            and publish publicly only if you choose — after a real person reviews it.
+            Every memorial starts private by default. Share with a link, invite family, and publish publicly only if you
+            choose — after a real person reviews it.
           </p>
 
           <div style={{ marginTop: 16 }} className="card">
-            <div
-              style={{
-                padding: 16,
-                display: "flex",
-                gap: 12,
-                flexWrap: "wrap",
-                alignItems: "center",
-              }}
-            >
+            <div style={{ padding: 16, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
               <span style={{ color: "var(--muted)" }}>Human review before publication</span>
               <span style={{ color: "var(--muted2)" }}>Most approvals: 24–48 hours</span>
               <span style={{ color: "var(--muted2)", marginLeft: "auto" }}>Launch pricing</span>
@@ -138,9 +126,7 @@ export default function PricingPage() {
             <div className="grid grid3">
               <div className="card" style={{ padding: 18 }}>
                 <div style={{ fontWeight: 850, marginBottom: 8 }}>1) Create privately</div>
-                <div style={{ color: "var(--muted)" }}>
-                  Draft your memorial. Share a private link with family anytime.
-                </div>
+                <div style={{ color: "var(--muted)" }}>Draft your memorial. Share a private link with family anytime.</div>
               </div>
 
               <div className="card" style={{ padding: 18 }}>
@@ -152,9 +138,7 @@ export default function PricingPage() {
 
               <div className="card" style={{ padding: 18 }}>
                 <div style={{ fontWeight: 850, marginBottom: 8 }}>3) Publish (optional)</div>
-                <div style={{ color: "var(--muted)" }}>
-                  You decide whether your memorial appears in browse/search.
-                </div>
+                <div style={{ color: "var(--muted)" }}>You decide whether your memorial appears in browse/search.</div>
               </div>
             </div>
 
@@ -173,9 +157,7 @@ export default function PricingPage() {
             >
               <div style={{ display: "grid", gap: 4 }}>
                 <div style={{ fontWeight: 850 }}>Not sure yet?</div>
-                <div style={{ color: "var(--muted)" }}>
-                  Start a draft first — you can decide on publishing later.
-                </div>
+                <div style={{ color: "var(--muted)" }}>Start a draft first — you can decide on publishing later.</div>
               </div>
 
               <Link className="btn btnPrimary" href="/create-memorial?plan=free">
@@ -184,7 +166,7 @@ export default function PricingPage() {
             </div>
 
             <div style={{ marginTop: 12, color: "var(--muted2)", fontSize: "0.95rem" }}>
-              Payment wiring can be added next; this page is launch-ready and easy to update.
+              Payment wiring can be added next; this page is ready for launch and easy to update.
             </div>
           </div>
         </section>
@@ -216,6 +198,7 @@ function PlanCard({ plan }: { plan: Plan }) {
         overflow: "hidden",
       }}
     >
+      {/* Featured badge */}
       {plan.featured ? (
         <div
           style={{
@@ -225,8 +208,7 @@ function PlanCard({ plan }: { plan: Plan }) {
             padding: "6px 10px",
             borderRadius: 999,
             border: "1px solid rgba(215,183,255,0.55)",
-            background:
-              "linear-gradient(180deg, rgba(215,183,255,0.22), rgba(147,215,255,0.16))",
+            background: "linear-gradient(180deg, rgba(215,183,255,0.22), rgba(147,215,255,0.16))",
             color: "var(--text)",
             fontSize: "0.85rem",
             fontWeight: 800,
@@ -237,15 +219,11 @@ function PlanCard({ plan }: { plan: Plan }) {
       ) : null}
 
       <div style={{ display: "grid", gap: 6 }}>
-        <div style={{ fontWeight: 900, fontSize: "1.1rem", letterSpacing: "-0.01em" }}>
-          {plan.name}
-        </div>
+        <div style={{ fontWeight: 900, fontSize: "1.1rem", letterSpacing: "-0.01em" }}>{plan.name}</div>
 
         <div style={{ display: "flex", gap: 10, alignItems: "baseline", flexWrap: "wrap" }}>
           <div style={{ fontWeight: 950, fontSize: "1.55rem" }}>{plan.price}</div>
-          {plan.cadence ? (
-            <div style={{ color: "var(--muted2)", fontWeight: 700 }}>{plan.cadence}</div>
-          ) : null}
+          {plan.cadence ? <div style={{ color: "var(--muted2)", fontWeight: 700 }}>{plan.cadence}</div> : null}
         </div>
 
         <div style={{ color: "var(--muted)" }}>{plan.note}</div>
@@ -268,9 +246,7 @@ function PlanCard({ plan }: { plan: Plan }) {
           {plan.cta}
         </Link>
 
-        <span style={{ color: "var(--muted2)", fontSize: "0.95rem" }}>
-          Starts private • publish optional
-        </span>
+        <span style={{ color: "var(--muted2)", fontSize: "0.95rem" }}>Starts private • publish optional</span>
       </div>
 
       <div
