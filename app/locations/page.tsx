@@ -70,28 +70,34 @@ export default function LocationsPage() {
 
           <div style={{ height: 14 }} />
 
-          <div className="stateGrid">
+          <div className="ekStateGrid">
             {STATES.map((s) => (
               <Link
                 key={s.abbr}
                 href={`/locations/${s.slug}`}
-                className="stateTile"
+                className="ekStateTile"
                 aria-label={s.name}
                 title={s.name}
               >
-                <div className="stateAbbr">{s.abbr}</div>
-                <div className="stateName">{s.name}</div>
+                <div className="ekStateAbbr">{s.abbr}</div>
+                <div className="ekStateName">{s.name}</div>
               </Link>
             ))}
           </div>
 
           <div style={{ height: 16 }} />
 
-          <div className="card" style={{ padding: 18, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+          <div
+            className="card"
+            style={{ padding: 18, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}
+          >
             <div style={{ display: "grid", gap: 4 }}>
               <div style={{ fontWeight: 850 }}>Want to start one instead?</div>
-              <div style={{ color: "var(--muted)" }}>Create privately first — decide on publishing later.</div>
+              <div style={{ color: "var(--muted)" }}>
+                Create privately first — decide on publishing later.
+              </div>
             </div>
+
             <div style={{ marginLeft: "auto" }}>
               <Link className="btn btnPrimary" href="/create-memorial?plan=free">
                 Start a memorial
@@ -102,43 +108,6 @@ export default function LocationsPage() {
 
         <div style={{ height: 26 }} />
       </div>
-
-      {/* Page-scoped styles so you don’t have to touch globals */}
-      <style jsx>{`
-        .stateGrid{
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-          gap: 12px;
-          margin-top: 10px;
-        }
-        .stateTile{
-          display: grid;
-          gap: 6px;
-          padding: 14px;
-          border-radius: 18px;
-          border: 1px solid rgba(255,255,255,0.14);
-          background: rgba(255,255,255,0.08);
-          text-decoration: none;
-        }
-        .stateTile:hover{
-          background: rgba(255,255,255,0.12);
-          border-color: rgba(255,255,255,0.22);
-        }
-        .stateAbbr{
-          font-weight: 950;
-          letter-spacing: 0.14em;
-          font-size: 1.05rem;
-        }
-        .stateName{
-          color: rgba(255,255,255,0.78);
-          font-size: 0.95rem;
-          line-height: 1.1;
-        }
-        @media (max-width: 420px){
-          .stateGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .stateName{ display: none; } /* tiny phones: just show abbreviations */
-        }
-      `}</style>
     </main>
   );
 }
