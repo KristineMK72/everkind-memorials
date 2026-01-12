@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
 
-function toTitleCaseFromSlug(slug: string) {
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+
+function titleCaseFromSlug(slug: string) {
   return slug
     .split("-")
     .filter(Boolean)
@@ -8,38 +11,39 @@ function toTitleCaseFromSlug(slug: string) {
     .join(" ");
 }
 
-export default function StateLocationsPage({
-  params,
-}: {
-  params: Record<string, string | string[] | undefined>;
-}) {
-  // Support multiple possible param names:
-  // - /locations/[state] -> params.state
-  // - /locations/[slug]  -> params.slug
-  // - fallback -> first key in params
-  let raw =
-    (params.state as any) ??
-    (params.slug as any) ??
-    (Object.keys(params || {}).length ? (params as any)[Object.keys(params)[0]] : undefined);
+export default function StateLocationsPage() {
+  const params = useParams<{ state?: string }>();
+  const pathname = usePathname();
 
-  if (Array.isArray(raw)) raw = raw[0];
-  if (typeof raw !== "string" || !raw.length) raw = "unknown";
+  // Primary: dynamic param
+  let slug = params?.state ?? "";
 
-  let decoded = raw;
-  try {
-    decoded = decodeURIComponent(raw);
-  } catch {
-    // ignore
+  // Fallback: parse from URL (/locations/alabama -> "alabama")
+  if (!slug && pathname) {
+    const parts = pathname.split("/").filter(Boolean);
+    slug = parts[parts.length - 1] ?? "";
   }
 
-  const stateName = toTitleCaseFromSlug(decoded);
+  // Final guard
+  if (!slug) slug = "unknown";
+
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    // ignore malformed URI
+  }
+
+  const stateName = titleCaseFromSlug(decoded);
 
   return (
     <main>
       <div className="container">
         <section className="glass" style={{ padding: 26 }}>
           <div className="kicker">Locations</div>
-          <h1 className="h1" style={{ marginTop: 10 }}>{stateName}</h1>
+          <h1 className="h1" style={{ marginTop: 10 }}>
+            {stateName}
+          </h1>
 
           <p className="p" style={{ maxWidth: 860 }}>
             Public memorials in {stateName} will appear here once families choose to publish.
